@@ -61,11 +61,10 @@
         
         content = [self processContent:content];
         
-        NSLog(@"content:%@",content);
         
         NSString *html = [NSString stringWithFormat:@"%@%@%@",header,content,footer];
         
-//        NSLog(@"%@",html);
+        NSLog(@"%@",html);
         
         NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
         void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
@@ -84,20 +83,18 @@
             }
         };
         
-//        NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.5], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:contentView.frame.size], DTMaxImageSize,
-//                                        @"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, callBackBlock, DTWillFlushBlockCallBack, nil];
-//        
+        NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:/*[NSNumber numberWithFloat:1.2], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:contentView.frame.size], DTMaxImageSize,*/@"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, callBackBlock, DTWillFlushBlockCallBack, @"30",DTDefaultFirstLineHeadIndent,@"1.5",DTDefaultLineHeightMultiplier,nil];
+        
 
 //        [options setObject:[NSURL fileURLWithPath:readmePath] forKey:NSBaseURLDocumentOption];
         
-        NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:NULL documentAttributes:NULL];
+        NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
         contentView.attributedString = string;
     }
 }
 
-- (NSString *)processContent:(NSString *)html
+- (NSString *)processContent:(NSString *)content
 {
-    __block NSString *content = html;
     
     NSString *regexToReplace = @"<(h\\d) id=\"(.*)\">(.*)</\\1>"; //id=\"(.*)\">(.*)<\\/h\1>";
     NSError *error = NULL;
@@ -107,21 +104,47 @@
     content = [regex stringByReplacingMatchesInString:content
                                               options:0
                                                 range:NSMakeRange(0, content.length)
-                                         withTemplate:[NSString stringWithFormat:@"<div class='.$1' id='$2'>$3</div>"]];
-    regexToReplace = @"<IMG id=\"(.*)\" />";
-    regex = [NSRegularExpression regularExpressionWithPattern:regexToReplace
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:&error];
+                                         withTemplate:[NSString stringWithFormat:@"<div class='$1' id='$2'>$3</div>"]];
+    
+    content = [self processImage:content];
+    content = [self processWordImage:content];
+    content = [self processTable:content];
+    return content;
+}
+
+- (NSString *)processImage:(NSString *)content
+{
+    NSString *regexToReplace = @"<IMG id=\"(.*)\"\\s/>";
+    NSError *error = NULL;
+
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexToReplace
+                                                      options:NSRegularExpressionCaseInsensitive
+                                                        error:&error];
     
     int length = content.length;
     NSArray *matches = [regex matchesInString:content options:0 range:NSMakeRange(0, length)];
     
-//    [regex enumerateMatchesInString:content options:0 range:NSMakeRange(0, content.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
     for (NSTextCheckingResult *result in matches) {
         NSRange range = [result rangeAtIndex:0];
         NSRange range1 = [result rangeAtIndex:1];
         NSString *imgStr = [content substringWithRange:range1];
         NSString *xmlPath = [[NSBundle mainBundle]pathForResource:imgStr ofType:@"xml"];
+        
+        NSLog(@"range:%@",[content substringWithRange:range]);
+        
+        if (![[content substringWithRange:range] hasPrefix:@"<IMG"]) {
+            continue;
+        }
+        if (!xmlPath) {
+            NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg'/>",imgStr,imgStr];
+            if ([imgStr hasPrefix:@"BZ"]) {
+                replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.png' height='20px' width='20px'/>",imgStr,imgStr];
+            }
+            NSLog(@"%@",replacement);
+            content = [content stringByReplacingCharactersInRange:range withString:replacement];
+            content = [self processContent:content];
+        }
+        
         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlPath] encoding:NSUTF8StringEncoding  error:NULL];
         if (!doc) {
             break;
@@ -134,23 +157,46 @@
         NSInteger width = [[sizes objectAtIndex:0] integerValue];
         NSInteger height = [[sizes objectAtIndex:1]integerValue];
         
-        float ratio = contentView.frame.size.width / width;
+        float ratio = (contentView.frame.size.width-80) / width;
         
         float het = height * ratio;
         
-        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' width='%fpx' height='%fpx'/>",imgStr,imgStr,contentView.size.width,het];
+        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' width='%fpx' height='%fpx' class='contentimgc'/>",imgStr,imgStr,contentView.size.width-80,het];
         
         NSLog(@"%@",replacement);
-        
+        NSLog(@"before:%@",content);
         content = [content stringByReplacingCharactersInRange:range withString:replacement];
-        content = [self processContent:content];
+        content = [self processImage:content];
+        NSLog(@"after:%@",content);
     }
-//    }];
-//
-//    content = [regex stringByReplacingMatchesInString:content
-//                                              options:0
-//                                                range:NSMakeRange(0, content.length)
-//                                         withTemplate:[NSString stringWithFormat:@"<img id='$1' src='$1.jpg'/>"]];
+
+    return content;
+}
+
+- (NSString *)processWordImage:(NSString *)content
+{
+    NSString *regexToReplace = @"<img src=\"BZ(.*)\" />";
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexToReplace
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    content = [regex stringByReplacingMatchesInString:content
+                                              options:0
+                                                range:NSMakeRange(0, content.length)
+                                         withTemplate:[NSString stringWithFormat:@"<img src='BZ$1' width='16px' height='16px'/>"]];
+    return content;
+}
+- (NSString *)processTable:(NSString *)content
+{
+    NSString *regexToReplace = @"<TABLE id=\"T(.*)\" />";
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexToReplace
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    content = [regex stringByReplacingMatchesInString:content
+                                              options:0
+                                                range:NSMakeRange(0, content.length)
+                                         withTemplate:[NSString stringWithFormat:@"<img src='T$1.jpg' style='width:%f' class='contentimgc'/>",contentView.frame.size.width-80]];
     return content;
 }
 

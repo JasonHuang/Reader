@@ -1,0 +1,26 @@
+            .h1{font-size: 26px;font-weight: bold;text-align: center;line-height:40px;margin-top:10px;}
+            .h1 img{width: 26px;height: 26px;margin-bottom: -4px;}
+            .h2{font-size: 24px;font-weight: bold;text-align: center;line-height:35px;margin-top:10px;}
+            .h2 img{width: 24px;height: 24px;margin-bottom: -4px;}
+            .h3{font-size: 23px;font-weight: bold;text-align: center;line-height:33px;margin-top:10px;}
+            .h3 img{width: 23px;height: 23px;margin-bottom: -4px;}
+            .h4{font-size: 22px;font-weight: bold;text-align: center;line-height:30px;margin-top:10px;}
+            .h4 img{width: 22px;height: 22px;margin-bottom: -4px;}
+            .h5{font-size: 21px;font-weight: bold;text-align: center;line-height:28px;margin-top:10px;}
+            .h5 img{width: 21px;height: 21px;margin-bottom: -3px;}
+            .h6{font-size: 20px;font-weight: bold;text-align: center;line-height:25px;margin-top:10px;}
+            .h6 img{width: 20px;height: 20px;margin-bottom: -3px;}
+            .h7{font-size: 19px;font-weight: bold;text-indent:28px;line-height:24px;margin-top:10px;}
+            .h7 img{width: 19px;height: 19px;margin-bottom: -3px;}
+            .h8{font-size: 18px;font-weight: bold;text-indent:28px;line-height:19px;margin-top:10px;}
+            .h8 img{width: 18px;height: 18px;margin-bottom: -3px;}
+            .h9{font-size: 17px;font-weight: bold;text-indent:28px;line-height:18px;margin-top:10px;}
+            .h9 img{width: 17px;height: 17px;margin-bottom: -2px;}
+            .h10{font-size: 16px;font-weight: bold;text-indent:28px;line-height:16px;margin-top:10px;}
+            .h10 img{width: 16px;height: 16px;margin-bottom: -2px;}
+            .h11{font-size: 15px;font-weight: bold;text-indent:28px;line-height:15px;margin-top:10px;}
+            .h11 img{width: 15px;height: 15px;margin-bottom: -2px;}
+            .h12{font-size: 14px;font-weight: bold;text-indent:28px;line-height:15px;margin-top:10px;}
+            .h12 img{width: 14px;height: 14px;margin-bottom: -2px;}
+            .contentimg{margin-left: 28px;border: 1px solid #878787;margin-top:15px;margin-bottom:15px;display:block;}
+            .contentimgc{margin-left: 28px;cursor:pointer;border: 1px solid #878787;margin-top:0px;margin-bottom:0px;}

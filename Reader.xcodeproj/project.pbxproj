@@ -625,6 +625,7 @@
 		309EB3271761DF5400B82DA7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309EB3261761DF5400B82DA7 /* CoreText.framework */; };
 		309EB32A1761E38C00B82DA7 /* header.html in Resources */ = {isa = PBXBuildFile; fileRef = 309EB3291761E38C00B82DA7 /* header.html */; };
 		309EB32C1761E39700B82DA7 /* footer.html in Resources */ = {isa = PBXBuildFile; fileRef = 309EB32B1761E39700B82DA7 /* footer.html */; };
+		30B830EB1762896000CBDA9B /* css.css in Resources */ = {isa = PBXBuildFile; fileRef = 30B830EA1762896000CBDA9B /* css.css */; };
 		30DBB105175DEECA006B1805 /* 08-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0F8175DEECA006B1805 /* 08-chat.png */; };
 		30DBB106175DEECA006B1805 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0F9175DEECA006B1805 /* 11-clock.png */; };
 		30DBB107175DEECA006B1805 /* 15-tags.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0FA175DEECA006B1805 /* 15-tags.png */; };
@@ -1269,6 +1270,7 @@
 		309EB3261761DF5400B82DA7 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		309EB3291761E38C00B82DA7 /* header.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = header.html; sourceTree = "<group>"; };
 		309EB32B1761E39700B82DA7 /* footer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = footer.html; sourceTree = "<group>"; };
+		30B830EA1762896000CBDA9B /* css.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = css.css; sourceTree = "<group>"; };
 		30DBB0F8175DEECA006B1805 /* 08-chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "08-chat.png"; sourceTree = "<group>"; };
 		30DBB0F9175DEECA006B1805 /* 11-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-clock.png"; sourceTree = "<group>"; };
 		30DBB0FA175DEECA006B1805 /* 15-tags.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "15-tags.png"; sourceTree = "<group>"; };
@@ -1991,6 +1993,7 @@
 				30DBB0F7175DEECA006B1805 /* Images */,
 				309EB3291761E38C00B82DA7 /* header.html */,
 				309EB32B1761E39700B82DA7 /* footer.html */,
+				30B830EA1762896000CBDA9B /* css.css */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -2727,6 +2730,7 @@
 				306B0BEF176026D1008E8BA6 /* cover.png in Resources */,
 				309EB32A1761E38C00B82DA7 /* header.html in Resources */,
 				309EB32C1761E39700B82DA7 /* footer.html in Resources */,
+				30B830EB1762896000CBDA9B /* css.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
