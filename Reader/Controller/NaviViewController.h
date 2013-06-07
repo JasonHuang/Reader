@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #include "PSStackedViewDelegate.h"
 
-
+@class RootViewController;
 @interface NaviViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *m_table;
@@ -17,5 +17,6 @@
     NSMutableArray *m_data;
 }
 
+@property (nonatomic,strong) RootViewController *parentController;
 
 @end

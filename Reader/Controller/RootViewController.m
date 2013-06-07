@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "NaviViewController.h"
 #import "DetailViewController.h"
+#import "ContentViewController.h"
 #import <GDataXML-HTML/GDataXMLNode.h>
 
 
@@ -29,7 +30,7 @@
 @implementation RootViewController
 @synthesize menuTable = m_menuTable;
 @synthesize cellContents = m_menuContents;
-
+@synthesize navi = _navi,detail = _detail, content = _content;
 
 - (void)viewDidLoad
 {
@@ -89,19 +90,29 @@
     [UIView animateWithDuration:2 animations:^{
         cover.alpha = 0;
     }];
-    [self performSelector:@selector(pushCatalog) withObject:nil afterDelay:2];
+    [self performSelector:@selector(pushCatalog) withObject:nil afterDelay:1.5];
 }
 
 - (void)pushCatalog
 {
-    if (!navi) {
-        navi = [[NaviViewController alloc] init];
-        [XAppDelegate.stackController pushViewController:navi fromViewController:nil animated:YES];
+    if (!self.navi) {
+        self.navi = [[NaviViewController alloc] init];
+        self.navi.parentController = self;
+        [XAppDelegate.stackController pushViewController:self.navi fromViewController:nil animated:NO];
     }
-    if(!detail){
-        detail = [[DetailViewController alloc] init];
-        [XAppDelegate.stackController pushViewController:detail fromViewController:nil animated:YES];
+    if(!self.detail){
+        self.detail = [[DetailViewController alloc] init];
+        self.detail.parentController = self;
+        self.detail.idx = 0;
+        [XAppDelegate.stackController pushViewController:self.detail fromViewController:nil animated:NO];
     }
+    if(!self.content){
+        self.content = [[ContentViewController alloc] init];
+        self.content.parentController = self;
+        [XAppDelegate.stackController pushViewController:self.content fromViewController:nil animated:NO];
+    }
+    [XAppDelegate.stackController expandStack:1 animated:NO];
+//    [XAppDelegate.stackController expandStack:1 animated:NO];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

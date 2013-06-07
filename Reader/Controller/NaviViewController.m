@@ -9,6 +9,8 @@
 #import "NaviViewController.h"
 #import <PSStackedView/PSStackedView.h>
 #import <GDataXML-HTML/GDataXMLNode.h>
+#import "RootViewController.h"
+#import "DetailViewController.h"
 
 
 @interface NaviViewController ()
@@ -16,7 +18,7 @@
 @end
 
 @implementation NaviViewController
-
+@synthesize parentController = _parentController;
 
 - (void)viewDidLoad
 {
@@ -27,7 +29,7 @@
     
     m_data = [[NSMutableArray alloc]initWithCapacity:1];
     
-    m_table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
+    m_table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
     m_table.delegate = self;
     m_table.dataSource = self;
     
@@ -87,6 +89,12 @@
 	cell.textLabel.text = [NSString stringWithFormat:@"%@", [item objectForKey:@"str"]];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.parentController.detail.idx = indexPath.row;
+    [self.parentController.detail reloadTableData];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

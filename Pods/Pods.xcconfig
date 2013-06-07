@@ -1,8 +1,8 @@
 ALWAYS_SEARCH_USER_PATHS = YES
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS} $(SDKROOT)/usr/include/libxml2
-OTHER_LDFLAGS = -ObjC -lxml2 -framework QuartzCore
-PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/CollapseClick" "${PODS_ROOT}/BuildHeaders/GDataXML-HTML" "${PODS_ROOT}/BuildHeaders/PSStackedView" "${PODS_ROOT}/BuildHeaders/SVProgressHUD"
+HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS} "$(SDKROOT)/usr/include/libxml2" $(SDKROOT)/usr/include/libxml2 $(SDKROOT)/usr/include/libxml2
+OTHER_LDFLAGS = -ObjC -lxml2 -framework CoreGraphics -framework CoreText -framework ImageIO -framework MediaPlayer -framework QuartzCore
+PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/DTCoreText" "${PODS_ROOT}/BuildHeaders/DTFoundation" "${PODS_ROOT}/BuildHeaders/GDataXML-HTML" "${PODS_ROOT}/BuildHeaders/PSStackedView" "${PODS_ROOT}/BuildHeaders/SVProgressHUD"
 PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/CollapseClick" "${PODS_ROOT}/Headers/GDataXML-HTML" "${PODS_ROOT}/Headers/PSStackedView" "${PODS_ROOT}/Headers/SVProgressHUD"
+PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/DTCoreText" "${PODS_ROOT}/Headers/DTFoundation" "${PODS_ROOT}/Headers/GDataXML-HTML" "${PODS_ROOT}/Headers/PSStackedView" "${PODS_ROOT}/Headers/SVProgressHUD"
 PODS_ROOT = ${SRCROOT}/Pods

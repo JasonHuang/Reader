@@ -8,17 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@class NaviViewController,DetailViewController;
+@class NaviViewController,DetailViewController,ContentViewController;
 
 @interface RootViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
     UITableView *m_menuTable;
     NSArray *m_menuContents;
     
-    NaviViewController *navi;
-    DetailViewController *detail;
+
     
     UIImageView *cover;
 }
+
+@property (nonatomic,strong) NaviViewController *navi;
+@property (nonatomic,strong) DetailViewController *detail;
+@property (nonatomic,strong) ContentViewController *content;
 
 @end

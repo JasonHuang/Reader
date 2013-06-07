@@ -621,6 +621,8 @@
 		306B0BEC1760165C008E8BA6 /* T9-3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 306B09941760165C008E8BA6 /* T9-3.xml */; };
 		306B0BED1760165C008E8BA6 /* Thumbs.db in Resources */ = {isa = PBXBuildFile; fileRef = 306B09951760165C008E8BA6 /* Thumbs.db */; };
 		306B0BEF176026D1008E8BA6 /* cover.png in Resources */ = {isa = PBXBuildFile; fileRef = 306B0BEE176026D1008E8BA6 /* cover.png */; };
+		309EB32417619B9300B82DA7 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 309EB32317619B9300B82DA7 /* ContentViewController.m */; };
+		309EB3271761DF5400B82DA7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309EB3261761DF5400B82DA7 /* CoreText.framework */; };
 		30DBB105175DEECA006B1805 /* 08-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0F8175DEECA006B1805 /* 08-chat.png */; };
 		30DBB106175DEECA006B1805 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0F9175DEECA006B1805 /* 11-clock.png */; };
 		30DBB107175DEECA006B1805 /* 15-tags.png in Resources */ = {isa = PBXBuildFile; fileRef = 30DBB0FA175DEECA006B1805 /* 15-tags.png */; };
@@ -1260,6 +1262,9 @@
 		306B09941760165C008E8BA6 /* T9-3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "T9-3.xml"; sourceTree = "<group>"; };
 		306B09951760165C008E8BA6 /* Thumbs.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Thumbs.db; sourceTree = "<group>"; };
 		306B0BEE176026D1008E8BA6 /* cover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cover.png; sourceTree = "<group>"; };
+		309EB32217619B9300B82DA7 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
+		309EB32317619B9300B82DA7 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
+		309EB3261761DF5400B82DA7 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		30DBB0F8175DEECA006B1805 /* 08-chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "08-chat.png"; sourceTree = "<group>"; };
 		30DBB0F9175DEECA006B1805 /* 11-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-clock.png"; sourceTree = "<group>"; };
 		30DBB0FA175DEECA006B1805 /* 15-tags.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "15-tags.png"; sourceTree = "<group>"; };
@@ -1287,6 +1292,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				309EB3271761DF5400B82DA7 /* CoreText.framework in Frameworks */,
 				30DBB115175DF0A0006B1805 /* QuartzCore.framework in Frameworks */,
 				303F4358175DA36C00F8FE12 /* UIKit.framework in Frameworks */,
 				303F435A175DA36C00F8FE12 /* Foundation.framework in Frameworks */,
@@ -1320,6 +1326,7 @@
 		303F4356175DA36C00F8FE12 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				309EB3261761DF5400B82DA7 /* CoreText.framework */,
 				30DBB114175DF0A0006B1805 /* QuartzCore.framework */,
 				303F4357175DA36C00F8FE12 /* UIKit.framework */,
 				303F4359175DA36C00F8FE12 /* Foundation.framework */,
@@ -2026,6 +2033,8 @@
 				30508D06175F1DC60021FD4B /* NaviViewController.m */,
 				30508D08175F1E530021FD4B /* DetailViewController.h */,
 				30508D09175F1E530021FD4B /* DetailViewController.m */,
+				309EB32217619B9300B82DA7 /* ContentViewController.h */,
+				309EB32317619B9300B82DA7 /* ContentViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2759,6 +2768,7 @@
 				30DBB11C175DF1B2006B1805 /* MenuTableViewCell.m in Sources */,
 				30508D07175F1DC60021FD4B /* NaviViewController.m in Sources */,
 				30508D0A175F1E530021FD4B /* DetailViewController.m in Sources */,
+				309EB32417619B9300B82DA7 /* ContentViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

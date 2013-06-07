@@ -8,14 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #include "PSStackedViewDelegate.h"
-#import <CollapseClick/CollapseClick.h>
 
-
-@interface DetailViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate,CollapseClickDelegate>
+@class RootViewController;
+@interface DetailViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *m_table;
     
     NSMutableArray *m_data;
     
 }
+
+@property (nonatomic,assign) NSInteger idx;
+@property (nonatomic,strong) RootViewController *parentController;
+
+
+- (void)reloadTableData;
+
 @end
