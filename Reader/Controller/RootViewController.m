@@ -165,7 +165,7 @@
     }
     
     if (indexPath.row == 0) {
-        viewController = [[NaviViewController alloc] init];
+//        viewController = [[NaviViewController alloc] init];
     }else if(indexPath.row == 1) {
         NoteViewController *note = [[NoteViewController alloc]init];
         popover = [[UIPopoverController alloc] initWithContentViewController:note];

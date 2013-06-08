@@ -14,11 +14,12 @@
 @interface ContentViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     DTAttributedTextView *contentView;
+    BOOL foundContent;
 }
 @property (nonatomic,strong) NSString *section;
 @property (nonatomic,strong) NSString *articleId;
 @property (nonatomic,strong) RootViewController *parentController;
 
-- (void)loadData;
+- (void)loadData:(NSString *) aId;
 
 @end

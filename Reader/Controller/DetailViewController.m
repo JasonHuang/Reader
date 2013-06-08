@@ -160,9 +160,9 @@
 {
     NSDictionary *item = [m_data objectAtIndex:indexPath.row];
     NSString *articleId = [item objectForKey:@"id"];
-    if (articleId.length > 5) {
-        articleId = [articleId substringToIndex:5];
-    }
+//    if (articleId.length > 5) {
+//        articleId = [articleId substringToIndex:5];
+//    }
     NSLog(@"%@ clicked",articleId);
     
     if (self.idx == 0) {
@@ -174,7 +174,7 @@
     }
     
     self.parentController.content.articleId = articleId;
-    [self.parentController.content loadData];
+    [self.parentController.content loadData:articleId];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -29,11 +29,13 @@
     
     self.section = @"0";
     self.articleId = @"1";
+    foundContent = NO;
+//    contentView.backgroundColor = [UIColor redColor];
     
-    [self loadData];
+    [self loadData:self.articleId];
 }
 
-- (void)loadData
+- (void)loadData:(NSString *) aId
 {
     NSString *path = [[NSBundle mainBundle]pathForResource:@"book" ofType:@"xml"];
     GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:path] encoding:NSUTF8StringEncoding  error:NULL];
@@ -44,21 +46,19 @@
     NSArray *items = [doc nodesForXPath:@"//book/*/Article" error:NULL];
     for (GDataXMLElement *item in items) {
         GDataXMLNode *sequenceNumber = [item childAtIndex:0] ;
-        NSArray *nodes = [item nodesForXPath:@"./Unit_content" error:NULL];
-        if (!nodes || [nodes count] < 1) {
-            return;
-        }
-        
-        GDataXMLElement *item = [nodes objectAtIndex:0];
-        
-        GDataXMLNode *unitContent = [item childAtIndex:0];
-        
-        if (![[sequenceNumber stringValue] isEqualToString:_articleId]) {
+        NSString *txt = [sequenceNumber stringValue];
+        if (![txt isEqualToString:aId]) {
             continue;
         }
         
+        NSArray *nodes = [item nodesForXPath:@"./Unit_content" error:NULL];
+        if (!nodes || [nodes count] < 1) {
+            break;
+        }
+        GDataXMLElement *item = [nodes objectAtIndex:0];
+        GDataXMLNode *unitContent = [item childAtIndex:0];
         NSLog(@"%@ found",[sequenceNumber stringValue]);
-        
+        foundContent = YES;
         NSString *headerPath = [[NSBundle mainBundle]pathForResource:@"header" ofType:@"html"];
         NSString *header = [NSString stringWithContentsOfFile:headerPath encoding:NSUTF8StringEncoding error:NULL];
         
@@ -95,17 +95,33 @@
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
         contentView.attributedString = string;
-        [contentView scrollRectToVisible:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height) animated:NO];
+//        [contentView sizeToFit];
+        if (contentView.contentSize.height >contentView.frame.size.height) {
+            [contentView scrollToAnchorNamed:[NSString stringWithFormat:@"CHP%@",self.articleId] animated:NO];
+        }
         if ([self.section isEqualToString:@"0"]) {
             break;
         }
     }
+    [self shortenArticleId:aId];
+}
+
+- (void)shortenArticleId:(NSString *)aId
+{
+    if (aId.length < 3 || foundContent) {
+        foundContent = NO;
+        return;
+    }
+    NSLog(@"before:%@",aId);
+    aId = [aId substringToIndex:(aId.length-2)];
+    NSLog(@"after:%@",aId);
+    [self loadData:aId];
 }
 
 - (NSString *)processContent:(NSString *)content
 {
     
-    NSString *regexToReplace = @"<(h\\d) id=\"(.*)\">(.*)</\\1>"; //id=\"(.*)\">(.*)<\\/h\1>";
+    NSString *regexToReplace = @"<(h\\d+) id=\"(.*)\">(.*)</\\1>"; //id=\"(.*)\">(.*)<\\/h\1>";
     NSError *error = NULL;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexToReplace
                                                                            options:NSRegularExpressionCaseInsensitive
@@ -113,7 +129,7 @@
     content = [regex stringByReplacingMatchesInString:content
                                               options:0
                                                 range:NSMakeRange(0, content.length)
-                                         withTemplate:[NSString stringWithFormat:@"<div class='$1' id='$2'>$3</div>"]];
+                                         withTemplate:[NSString stringWithFormat:@"<a name='$2'><div class='$1' id='$2' name='$2'>$3</div></a>"]];
     
     content = [self processImage:content];
     content = [self processWordImage:content];
@@ -173,7 +189,7 @@
         */
          
         NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' style='width:%f'/>",imgStr,imgStr,contentView.size.width-80];
-
+    
         content = [content stringByReplacingCharactersInRange:range withString:replacement];
         content = [self processImage:content];
     }
