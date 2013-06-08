@@ -87,10 +87,10 @@
 
     [self.view bringSubviewToFront:cover];
 
-    [UIView animateWithDuration:2 animations:^{
+    [UIView animateWithDuration:4 animations:^{
         cover.alpha = 0;
     }];
-    [self performSelector:@selector(pushCatalog) withObject:nil afterDelay:1.5];
+    [self performSelector:@selector(pushCatalog) withObject:nil afterDelay:0.5];
 }
 
 - (void)pushCatalog

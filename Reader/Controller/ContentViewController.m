@@ -17,7 +17,7 @@
 @end
 
 @implementation ContentViewController
-@synthesize articleId = _articleId,parentController = _parentController;
+@synthesize articleId = _articleId,parentController = _parentController,section = _section;
 
 - (void)viewDidLoad
 {
@@ -26,6 +26,9 @@
     contentView = [[DTAttributedTextView alloc]initWithFrame:CGRectMake(20, 20, self.view.width-100, self.view.height-40)];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:contentView];
+    
+    self.section = @"0";
+    self.articleId = @"1";
     
     [self loadData];
 }
@@ -41,7 +44,14 @@
     NSArray *items = [doc nodesForXPath:@"//book/*/Article" error:NULL];
     for (GDataXMLElement *item in items) {
         GDataXMLNode *sequenceNumber = [item childAtIndex:0] ;
-        GDataXMLNode *unitContent = [item childAtIndex:24];
+        NSArray *nodes = [item nodesForXPath:@"./Unit_content" error:NULL];
+        if (!nodes || [nodes count] < 1) {
+            return;
+        }
+        
+        GDataXMLElement *item = [nodes objectAtIndex:0];
+        
+        GDataXMLNode *unitContent = [item childAtIndex:0];
         
         if (![[sequenceNumber stringValue] isEqualToString:_articleId]) {
             continue;
@@ -56,11 +66,8 @@
         NSString *footer = [NSString stringWithContentsOfFile:footerPath encoding:NSUTF8StringEncoding error:NULL];
         
         NSString *content = [unitContent stringValue];
-        
-//        content = @"<IMG id=\"P2-1\" />";
-        
+                
         content = [self processContent:content];
-        
         
         NSString *html = [NSString stringWithFormat:@"%@%@%@",header,content,footer];
         
@@ -83,13 +90,15 @@
             }
         };
         
-        NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:/*[NSNumber numberWithFloat:1.2], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:contentView.frame.size], DTMaxImageSize,*/@"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, callBackBlock, DTWillFlushBlockCallBack, @"30",DTDefaultFirstLineHeadIndent,@"1.5",DTDefaultLineHeightMultiplier,nil];
+        NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:/*[NSNumber numberWithFloat:1.2], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:contentView.frame.size], DTMaxImageSize,*/@"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, /*callBackBlock, DTWillFlushBlockCallBack, */@"30",DTDefaultFirstLineHeadIndent,@"1.0",DTDefaultLineHeightMultiplier,nil];
         
-
-//        [options setObject:[NSURL fileURLWithPath:readmePath] forKey:NSBaseURLDocumentOption];
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
         contentView.attributedString = string;
+        [contentView scrollRectToVisible:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height) animated:NO];
+        if ([self.section isEqualToString:@"0"]) {
+            break;
+        }
     }
 }
 
@@ -128,13 +137,14 @@
         NSRange range = [result rangeAtIndex:0];
         NSRange range1 = [result rangeAtIndex:1];
         NSString *imgStr = [content substringWithRange:range1];
-        NSString *xmlPath = [[NSBundle mainBundle]pathForResource:imgStr ofType:@"xml"];
-        
-        NSLog(@"range:%@",[content substringWithRange:range]);
-        
         if (![[content substringWithRange:range] hasPrefix:@"<IMG"]) {
             continue;
         }
+        /*NSString *xmlPath = [[NSBundle mainBundle]pathForResource:imgStr ofType:@"xml"];
+        
+        NSLog(@"range:%@",[content substringWithRange:range]);
+        
+       
         if (!xmlPath) {
             NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg'/>",imgStr,imgStr];
             if ([imgStr hasPrefix:@"BZ"]) {
@@ -160,14 +170,12 @@
         float ratio = (contentView.frame.size.width-80) / width;
         
         float het = height * ratio;
-        
-        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' width='%fpx' height='%fpx' class='contentimgc'/>",imgStr,imgStr,contentView.size.width-80,het];
-        
-        NSLog(@"%@",replacement);
-        NSLog(@"before:%@",content);
+        */
+         
+        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' style='width:%f'/>",imgStr,imgStr,contentView.size.width-80];
+
         content = [content stringByReplacingCharactersInRange:range withString:replacement];
         content = [self processImage:content];
-        NSLog(@"after:%@",content);
     }
 
     return content;
@@ -183,7 +191,7 @@
     content = [regex stringByReplacingMatchesInString:content
                                               options:0
                                                 range:NSMakeRange(0, content.length)
-                                         withTemplate:[NSString stringWithFormat:@"<img src='BZ$1' width='16px' height='16px'/>"]];
+                                         withTemplate:[NSString stringWithFormat:@"<img src='BZ$1' class='wordpng'/>"]];
     return content;
 }
 - (NSString *)processTable:(NSString *)content

@@ -94,6 +94,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.parentController.detail.idx = indexPath.row;
+    self.parentController.detail.cnt = [m_data count];
     [self.parentController.detail reloadTableData];
 }
 

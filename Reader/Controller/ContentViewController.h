@@ -15,6 +15,7 @@
 {
     DTAttributedTextView *contentView;
 }
+@property (nonatomic,strong) NSString *section;
 @property (nonatomic,strong) NSString *articleId;
 @property (nonatomic,strong) RootViewController *parentController;
 

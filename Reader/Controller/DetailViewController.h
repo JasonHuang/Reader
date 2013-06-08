@@ -19,6 +19,7 @@
 }
 
 @property (nonatomic,assign) NSInteger idx;
+@property (nonatomic,assign) NSInteger cnt;
 @property (nonatomic,strong) RootViewController *parentController;
 
 

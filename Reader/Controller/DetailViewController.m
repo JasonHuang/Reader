@@ -18,6 +18,7 @@
 
 @implementation DetailViewController
 @synthesize idx = _idx;
+@synthesize cnt = _cnt;
 @synthesize parentController = _parentController;
 
 
@@ -58,6 +59,18 @@
             NSDictionary *it = [NSDictionary dictionaryWithObjectsAndKeys:[itemId stringValue],@"id",[layer stringValue],@"layer",[itemStr stringValue],@"str", nil];
             [m_data addObject:it];
         }
+    }else if (self.idx == (self.cnt-1)){
+        NSArray *items = [doc nodesForXPath:@"//catalog/back_of_catalog/item" error:NULL];
+        for (GDataXMLElement *item in items) {
+            GDataXMLNode *itemId = [item childAtIndex:0] ;
+            GDataXMLNode *layer = [item childAtIndex:1];
+            GDataXMLNode *itemStr = [item childAtIndex:2];
+            
+            NSLog(@"%@",[itemStr stringValue]);
+            NSDictionary *it = [NSDictionary dictionaryWithObjectsAndKeys:[itemId stringValue],@"id",[layer stringValue],@"layer",[itemStr stringValue],@"str", nil];
+            [m_data addObject:it];
+        }
+
     }else{
         NSArray *items = [doc nodesForXPath:@"//catalog/body_of_catalog/item" error:NULL];
         for (GDataXMLElement *item in items) {
@@ -135,7 +148,7 @@
     NSDictionary *item = [m_data objectAtIndex:indexPath.row];
     NSString *txt = @"";
     for (int i=0 ; i < [[item objectForKey:@"layer"] intValue]; i++) {
-        txt = [txt stringByAppendingFormat:@"%@",@" "];
+        txt = [txt stringByAppendingFormat:@"%@",@"  "];
     }
     txt = [txt stringByAppendingFormat:@"%@",[item objectForKey:@"str"]];
 	cell.textLabel.text = txt;
@@ -151,6 +164,15 @@
         articleId = [articleId substringToIndex:5];
     }
     NSLog(@"%@ clicked",articleId);
+    
+    if (self.idx == 0) {
+        self.parentController.content.section = @"0";
+    }else if (self.idx == (self.cnt-1)){
+        self.parentController.content.section = @"2";
+    }else {
+        self.parentController.content.section = @"1";
+    }
+    
     self.parentController.content.articleId = articleId;
     [self.parentController.content loadData];
 }
