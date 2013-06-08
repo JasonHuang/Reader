@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class NaviViewController,DetailViewController,ContentViewController;
+@class NaviViewController,DetailViewController,ContentViewController,NoteViewController;
 
 @interface RootViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
     UITableView *m_menuTable;
     NSArray *m_menuContents;
     
-
+    UIPopoverController *popover;
     
     UIImageView *cover;
 }

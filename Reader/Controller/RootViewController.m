@@ -16,6 +16,7 @@
 #import "DetailViewController.h"
 #import "ContentViewController.h"
 #import <GDataXML-HTML/GDataXMLNode.h>
+#import "NoteViewController.h"
 
 
 #define kMenuWidth 200
@@ -166,19 +167,28 @@
     if (indexPath.row == 0) {
         viewController = [[NaviViewController alloc] init];
     }else if(indexPath.row == 1) {
-        viewController = [[DetailViewController alloc] init];
+        NoteViewController *note = [[NoteViewController alloc]init];
+        popover = [[UIPopoverController alloc] initWithContentViewController:note];
+        [popover presentPopoverFromRect:CGRectMake(0, 43, 60, 43) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+        
     }else if(indexPath.row == 2) { // Twitter style
-        viewController = [[NaviViewController alloc] init];
-        viewController.view.width = roundf((self.view.width - stackController.leftInset)/2);
+//        viewController = [[NaviViewController alloc] init];
+//        viewController.view.width = roundf((self.view.width - stackController.leftInset)/2);
+        NoteViewController *note = [[NoteViewController alloc]init];
+        popover = [[UIPopoverController alloc] initWithContentViewController:note];
+        [popover presentPopoverFromRect:CGRectMake(0, 43*2, 60, 43) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
     }
     else if(indexPath.row == 3) {
-        [stackController collapseStack:1 animated:YES];
+//        [stackController collapseStack:1 animated:YES];
+        NoteViewController *note = [[NoteViewController alloc]init];
+        popover = [[UIPopoverController alloc] initWithContentViewController:note];
+        [popover presentPopoverFromRect:CGRectMake(0, 43*3, 60, 43) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
     }else if(indexPath.row == 4) { // right
         [stackController expandStack:1 animated:YES];
     }else if(indexPath.row == 5) {
-        while ([stackController.viewControllers count]) {
-            [stackController popViewControllerAnimated:YES];
-        }
+//        while ([stackController.viewControllers count]) {
+//            [stackController popViewControllerAnimated:YES];
+//        }
     }
     
     if (viewController) {
