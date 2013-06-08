@@ -11,14 +11,14 @@
 #import <DTCoreText/DTAttributedTextView.h>
 
 @class RootViewController,GDataXMLElement;
-@interface ContentViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface ContentViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     DTAttributedTextView *contentView;
     BOOL foundContent;
     
-    GDataXMLElement *previous;
-    GDataXMLElement *current;
-    GDataXMLElement *next;
+    NSString *previous;
+//    GDataXMLElement *current;
+    NSString *next;
     
     UILabel *topLink;
     UILabel *bottomLink;

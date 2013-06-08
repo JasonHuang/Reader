@@ -30,7 +30,7 @@
     self.section = @"0";
     self.articleId = @"1";
     foundContent = NO;
-    
+            
     [self loadData:self.articleId];
 
     [self renderContextLink];
@@ -65,17 +65,25 @@
         }
         
         foundContent = YES;
-        
-        current = [item copy];
-        
+                
         if (i > 1) {
-            previous = [items objectAtIndex:(i-1)];
+            GDataXMLElement *p = [items objectAtIndex:(i-1)];
+            NSArray *nodes = [p nodesForXPath:@"./Sequence_Number" error:NULL];
+            if (!nodes || [nodes count] < 1) {
+                break;
+            }
+            previous = [[nodes objectAtIndex:0] stringValue];
         }
        
         if (i < items.count - 1) {
-            next = [items objectAtIndex:(items.count - 1)];
+            GDataXMLElement *n = [items objectAtIndex:(i + 1)];
+            NSArray *nodes = [n nodesForXPath:@"./Sequence_Number" error:NULL];
+            if (!nodes || [nodes count] < 1) {
+                break;
+            }
+            next = [[nodes objectAtIndex:0] stringValue];
         }
-                
+        
         NSArray *nodes = [item nodesForXPath:@"./Unit_content" error:NULL];
         if (!nodes || [nodes count] < 1) {
             break;
@@ -117,6 +125,8 @@
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
         contentView.attributedString = string;
+//        contentView.scrollEnabled = YES;
+//        contentView.showsVerticalScrollIndicator = YES;
         if (contentView.contentSize.height >contentView.frame.size.height) {
             [contentView scrollToAnchorNamed:[NSString stringWithFormat:@"CHP%@",self.articleId] animated:NO];
         }
@@ -203,13 +213,14 @@
         
        
         if (!xmlPath) {
-            NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg'/>",imgStr,imgStr];
+            NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg'style='width:%fpx;'/>",imgStr,imgStr,contentView.size.width-80];
             if ([imgStr hasPrefix:@"BZ"]) {
                 replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.png' height='20px' width='20px'/>",imgStr,imgStr];
             }
             NSLog(@"%@",replacement);
             content = [content stringByReplacingCharactersInRange:range withString:replacement];
             content = [self processContent:content];
+            return content;
         }
         
         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlPath] encoding:NSUTF8StringEncoding  error:NULL];
@@ -263,6 +274,22 @@
                                                 range:NSMakeRange(0, content.length)
                                          withTemplate:[NSString stringWithFormat:@"<img src='T$1.jpg' style='width:%f' class='contentimgc'/>",contentView.frame.size.width-80]];
     return content;
+}
+
+#pragma mark - uiscrollview delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y < 0 ) {
+        if (!previous) {
+            return;
+        }
+        [self loadData:previous];
+    }else if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height)) {
+        if (!next) {
+            return;
+        }
+        [self loadData:next];
+    }
 }
 
 @end
