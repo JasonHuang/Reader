@@ -10,11 +10,18 @@
 #include "PSStackedViewDelegate.h"
 #import <DTCoreText/DTAttributedTextView.h>
 
-@class RootViewController;
+@class RootViewController,GDataXMLElement;
 @interface ContentViewController : UIViewController <PSStackedViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     DTAttributedTextView *contentView;
     BOOL foundContent;
+    
+    GDataXMLElement *previous;
+    GDataXMLElement *current;
+    GDataXMLElement *next;
+    
+    UILabel *topLink;
+    UILabel *bottomLink;
 }
 @property (nonatomic,strong) NSString *section;
 @property (nonatomic,strong) NSString *articleId;

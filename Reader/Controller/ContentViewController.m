@@ -30,9 +30,10 @@
     self.section = @"0";
     self.articleId = @"1";
     foundContent = NO;
-//    contentView.backgroundColor = [UIColor redColor];
     
     [self loadData:self.articleId];
+
+    [self renderContextLink];
 }
 
 - (void)loadData:(NSString *) aId
@@ -42,23 +43,46 @@
     if (!doc) {
         return;
     }
+    NSString *sectionTag = @"";
+    if ([self.section isEqualToString:@"0"]) {
+        sectionTag = @"front_of_book";
+    }else if ([self.section isEqualToString:@"1"]) {
+        sectionTag = @"body_of_book";
+    }else {
+        sectionTag = @"back_of_book";
+    }
+    NSString *xpathExpression = [NSString stringWithFormat:@"//book/%@/Article",sectionTag];
     
-    NSArray *items = [doc nodesForXPath:@"//book/*/Article" error:NULL];
-    for (GDataXMLElement *item in items) {
+    NSLog(@"xpathExpression:%@",xpathExpression);
+    
+    NSArray *items = [doc nodesForXPath:xpathExpression error:NULL];
+    for (int i=0; i < items.count ; i++) {
+        GDataXMLElement *item = [items objectAtIndex:i];
         GDataXMLNode *sequenceNumber = [item childAtIndex:0] ;
         NSString *txt = [sequenceNumber stringValue];
         if (![txt isEqualToString:aId]) {
             continue;
         }
         
+        foundContent = YES;
+        
+        current = [item copy];
+        
+        if (i > 1) {
+            previous = [items objectAtIndex:(i-1)];
+        }
+       
+        if (i < items.count - 1) {
+            next = [items objectAtIndex:(items.count - 1)];
+        }
+                
         NSArray *nodes = [item nodesForXPath:@"./Unit_content" error:NULL];
         if (!nodes || [nodes count] < 1) {
             break;
         }
-        GDataXMLElement *item = [nodes objectAtIndex:0];
-        GDataXMLNode *unitContent = [item childAtIndex:0];
+        GDataXMLNode *unitContent = [nodes objectAtIndex:0];
         NSLog(@"%@ found",[sequenceNumber stringValue]);
-        foundContent = YES;
+
         NSString *headerPath = [[NSBundle mainBundle]pathForResource:@"header" ofType:@"html"];
         NSString *header = [NSString stringWithContentsOfFile:headerPath encoding:NSUTF8StringEncoding error:NULL];
         
@@ -70,11 +94,9 @@
         content = [self processContent:content];
         
         NSString *html = [NSString stringWithFormat:@"%@%@%@",header,content,footer];
-        
-        NSLog(@"%@",html);
-        
+                
         NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
-        void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
+       /* void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
             
             // the block is being called for an entire paragraph, so we check the individual elements
             
@@ -88,14 +110,13 @@
                     oneChildElement.paragraphStyle.maximumLineHeight = element.textAttachment.displaySize.height;
                 }
             }
-        };
+        };*/
         
         NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:/*[NSNumber numberWithFloat:1.2], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:contentView.frame.size], DTMaxImageSize,*/@"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, /*callBackBlock, DTWillFlushBlockCallBack, */@"30",DTDefaultFirstLineHeadIndent,@"1.0",DTDefaultLineHeightMultiplier,nil];
         
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
         contentView.attributedString = string;
-//        [contentView sizeToFit];
         if (contentView.contentSize.height >contentView.frame.size.height) {
             [contentView scrollToAnchorNamed:[NSString stringWithFormat:@"CHP%@",self.articleId] animated:NO];
         }
@@ -116,6 +137,26 @@
     aId = [aId substringToIndex:(aId.length-2)];
     NSLog(@"after:%@",aId);
     [self loadData:aId];
+}
+
+- (void)renderContextLink
+{
+    if (!topLink) {
+        topLink = [[UILabel alloc]initWithFrame:CGRectMake(0, -60, contentView.frame.size.width, 60)];
+        topLink.backgroundColor = [UIColor lightGrayColor];
+        topLink.textAlignment = NSTextAlignmentCenter;
+        topLink.font = [UIFont systemFontOfSize:25];
+        [contentView addSubview:topLink];
+    }
+    if (!bottomLink) {
+        bottomLink = [[UILabel alloc]initWithFrame:CGRectMake(0, contentView.frame.size.height+ 60, contentView.frame.size.width, 60)];
+        bottomLink.backgroundColor = [UIColor lightGrayColor];
+        bottomLink.textAlignment = NSTextAlignmentCenter;
+        bottomLink.font = [UIFont systemFontOfSize:25];
+        [contentView addSubview:bottomLink];
+    }
+    topLink.text = @"top";
+    bottomLink.text = @"bottom";
 }
 
 - (NSString *)processContent:(NSString *)content
@@ -156,7 +197,7 @@
         if (![[content substringWithRange:range] hasPrefix:@"<IMG"]) {
             continue;
         }
-        /*NSString *xmlPath = [[NSBundle mainBundle]pathForResource:imgStr ofType:@"xml"];
+        NSString *xmlPath = [[NSBundle mainBundle]pathForResource:imgStr ofType:@"xml"];
         
         NSLog(@"range:%@",[content substringWithRange:range]);
         
@@ -186,9 +227,9 @@
         float ratio = (contentView.frame.size.width-80) / width;
         
         float het = height * ratio;
-        */
+        
          
-        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' style='width:%f'/>",imgStr,imgStr,contentView.size.width-80];
+        NSString *replacement = [NSString stringWithFormat:@"<img id='%@' src='%@.jpg' style='width:%fpx;height:%fpx;'/>",imgStr,imgStr,contentView.size.width-80,het];
     
         content = [content stringByReplacingCharactersInRange:range withString:replacement];
         content = [self processImage:content];

@@ -11,6 +11,7 @@
 #import <GDataXML-HTML/GDataXMLNode.h>
 #import "RootViewController.h"
 #import "ContentViewController.h"
+#import "NaviViewController.h"
 
 @interface DetailViewController ()
 
@@ -172,7 +173,14 @@
     }else {
         self.parentController.content.section = @"1";
     }
+
+    NSLog(@"x,%f",self.stackController.floatIndex);
     
+    if (self.stackController.floatIndex == 1) {
+        [self.stackController collapseStack:1 animated:YES];
+    }
+
+
     self.parentController.content.articleId = articleId;
     [self.parentController.content loadData:articleId];
 }

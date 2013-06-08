@@ -2874,6 +2874,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3174A096EF8A4EC49CD6D37E /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HUANG PENGXIAO (7FFEY7937U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HUANG PENGXIAO (7FFEY7937U)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reader/Reader-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -2884,6 +2886,8 @@
 				INFOPLIST_FILE = "Reader/Reader-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F1BA7F66-9F30-4A53-8F9F-F8D48CAA9058";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F1BA7F66-9F30-4A53-8F9F-F8D48CAA9058";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2892,6 +2896,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3174A096EF8A4EC49CD6D37E /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HUANG PENGXIAO (7FFEY7937U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HUANG PENGXIAO (7FFEY7937U)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reader/Reader-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -2902,6 +2908,8 @@
 				INFOPLIST_FILE = "Reader/Reader-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F1BA7F66-9F30-4A53-8F9F-F8D48CAA9058";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F1BA7F66-9F30-4A53-8F9F-F8D48CAA9058";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
